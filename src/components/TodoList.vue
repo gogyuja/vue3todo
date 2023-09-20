@@ -1,9 +1,12 @@
 <script setup lang='ts'>
 import Todo from './Todo.vue';
-let todos=defineProps(['todos'])
+let todos=defineProps(['todos']);
 
-function deleteTodo(title){
-console.log(title)
+
+const emit=defineEmits(['delete-todo']);
+
+function deleteTodo(todo){
+  emit('delete-todo',todo);
 }
 
 </script>
@@ -15,7 +18,7 @@ console.log(title)
                 aria-labelledby="ex1-tab-1">
                 <ul class="list-group mb-0">
                   
-                  <Todo v-for="todo in todos.todos" :stats="todo.status" :title="todo.title" @delete-todo="deleteTodo"></Todo>
+                  <Todo v-for="todo in todos.todos" :key="todo.idx" :todo="todo" :stats="todo.status" :title="todo.title" @delete-todo="deleteTodo"></Todo>
                   <!-- <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
                     style="background-color: #f4f6f7;">
                     <input class="form-check-input me-2" type="checkbox" value="" aria-label="..." checked />
