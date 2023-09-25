@@ -1,58 +1,47 @@
-<script setup lang='ts'>
-import {reactive} from 'vue'
-import {todoObj} from "../type/todoObj.ts";
-
-const props = defineProps<{ todo: todoObj }>()
-
-const viewData = reactive({
-  isVisible: false,
-  isChecked: false,
-  checkboxRef: null
-})
-
-const classObject = reactive({
-  'bi-trash': true,
-  'bi-trash-fill': false
-})
-
-const hoverEvent = (onHover: boolean) => {
-  classObject['bi-trash'] = !onHover;
-  classObject['bi-trash-fill'] = onHover;
-}
-
-</script>
-
 <template>
-  <li class="list-group-item d-flex align-items-center justify-content-between border-0 mb-2 rounded"
-      style="background-color: #f4f6f7;"
-      @click="viewData.isChecked = !viewData.isChecked">
-    <div class="d-flex align-items-center"
-         @click.capture="">
-      <input ref="checkboxRef"
-             class="form-check-input me-2"
-             :id="`${props.todo.idx}`"
-             type="checkbox"
-             v-model="viewData.isChecked"
-             aria-label="..."
-             checked
-             @click.stop/>
-      <div contenteditable="true"
-           @click.stop="">
+    <li class="list-group-item d-flex align-items-center justify-content-between border-0 mb-2 rounded" @click="clickCheckbox()" style="background-color: #f4f6f7;">
+        <div class="d-flex align-items-center" @click.capture="">
+            <input ref="checkboxRef" :id="todo.idx" class="form-check-input me-2" type="checkbox" value="" aria-label="..."  @click.stop="clickCheck()" />
+            <div contenteditable="true" @click.stop=""><span><s :style="isVisible ? {} : { display: 'contents' }"> {{ todo.title }}</s></span></div>
+        </div>
         <span>
-          <s :style="viewData.isVisible ? {} : { display: 'contents' }">
-            {{ props.todo.title }}
-          </s>
+            <i :class="classObject" class="bi" @mouseover="onHover" @mouseout="onHoverOut" @click.stop="$emit('delete-todo',todo)"></i>
         </span>
-      </div>
-    </div>
-    <span>
-      <i class="bi"
-         :class="classObject"
-         @mouseover="hoverEvent(true)"
-         @mouseout="hoverEvent(false)"
-         @click.stop="$emit('delete-todo',props.todo)"/>
-    </span>
-  </li>
+    </li>
 </template>
 
+<script setup lang='ts'>
+import { reactive, ref } from 'vue'
+    defineProps(['todo'])
 
+    const classObject = reactive({
+        'bi-trash': true,
+        'bi-trash-fill': false
+    })
+
+    const checkboxRef = ref<null | HTMLInputElement>(null);
+    let isVisible = ref(false);
+
+    const onHover = () => {
+        classObject['bi-trash'] = false;
+        classObject['bi-trash-fill'] = true;
+    }
+
+    const onHoverOut = () => {
+        classObject['bi-trash'] = true;
+        classObject['bi-trash-fill'] = false;
+    }
+
+    //li를 눌러 체크박스 이벤트 발생 시
+    const clickCheckbox=()=>{       
+        // 체크박스의 체크 상태를 토글합니다.
+        if(checkboxRef.value) {
+            checkboxRef.value.checked = !checkboxRef.value.checked;
+            isVisible.value=!isVisible.value;
+        }
+    }
+
+    const clickCheck=()=>{
+      isVisible.value=!isVisible.value;
+    }
+</script>

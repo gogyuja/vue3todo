@@ -74,7 +74,7 @@ const deleteTodo = (todo) => {
               <TodoInput @input-todo="handleInputTodo"></TodoInput>
               <TodoNav/>
               <TodoList
-                  :todos="viewData.todoList"
+                  :todoList="viewData.todoList"
                   @delete-todo="deleteTodo"></TodoList>
               <TodoFooter/>
             </div>
