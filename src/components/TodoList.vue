@@ -2,7 +2,7 @@
 import Todo from './Todo.vue';
 import {todoObj} from '../type/todoObj.ts'
 
-let todos = defineProps(['todos']);
+const props = defineProps<{ todoList: Array<todoObj> }>();
 const emit = defineEmits(['delete-todo']);
 
 function deleteTodo(todo: todoObj) {
@@ -18,7 +18,7 @@ function deleteTodo(todo: todoObj) {
          aria-labelledby="ex1-tab-1">
       <ul class="list-group mb-0">
 
-        <Todo v-for="(todoItem, index) in todos.todos"
+        <Todo v-for="(todoItem, index) in props.todoList"
               :key="`todoItem_${index}`"
               :todo="todoItem"
               @delete-todo="deleteTodo"/>
