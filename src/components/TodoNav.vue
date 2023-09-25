@@ -18,12 +18,7 @@
 
 <script setup lang='ts'>
 import {reactive} from "vue";
-
-type tabItem = {
-  id: string,
-  name: string,
-  active: boolean
-}
+import {tabItemObj} from "../type/tabItemObj.ts";
 
 const emit = defineEmits<{
   onClickTab: [id: string]
@@ -37,7 +32,7 @@ const viewData = reactive({
   ]
 })
 
-const onClickTab = (tItem: tabItem) => {
+const onClickTab = (tItem: tabItemObj) => {
   viewData.tabList.forEach((item) => {
     item.active = (item.id == tItem.id)
   })
