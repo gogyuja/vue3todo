@@ -1,24 +1,49 @@
 <template>
   <!-- Tabs navs -->
   <ul class="nav nav-tabs mb-4 pb-2" id="ex1" role="tablist">
-    <li class="nav-item" role="presentation">
-      <a class="nav-link active" id="ex1-tab-1" data-mdb-toggle="tab" href="#ex1-tabs-1" role="tab"
-        aria-controls="ex1-tabs-1" aria-selected="true">All</a>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a class="nav-link" id="ex1-tab-2" data-mdb-toggle="tab" href="#ex1-tabs-2" role="tab" aria-controls="ex1-tabs-2"
-        aria-selected="false">Active</a>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a class="nav-link" id="ex1-tab-3" data-mdb-toggle="tab" href="#ex1-tabs-3" role="tab" aria-controls="ex1-tabs-3"
-        aria-selected="false">Completed</a>
+    <li v-for="(tabItem,index) in viewData.tabList" class="nav-item" role="presentation">
+      <a :class="`nav-link ${(tabItem.active)?'active':''}`"
+         :id="`ex1-tabs-${index}`"
+         :href="`#ex1-tabs-${index}`"
+         :aria-controls="`ex1-tabs-${index}`"
+         data-mdb-toggle="tab"
+         role="tab"
+         aria-selected="true"
+         @click="onClickTab(tabItem)">
+        {{ tabItem.name }}
+      </a>
     </li>
   </ul>
-  <!-- Tabs navs -->
 </template>
-    
+
 <script setup lang='ts'>
+import {reactive} from "vue";
+
+type tabItem = {
+  id: string,
+  name: string,
+  active: boolean
+}
+
+const emit = defineEmits<{
+  onClickTab: [id: string]
+}>()
+
+const viewData = reactive({
+  tabList: [
+    {id: 'tab1', name: 'All', active: true},
+    {id: 'tab2', name: 'Active', active: false},
+    {id: 'tab3', name: 'Completed', active: false}
+  ]
+})
+
+const onClickTab = (tItem: tabItem) => {
+  viewData.tabList.forEach((item) => {
+    item.active = (item.id == tItem.id)
+  })
+  emit('onClickTab', tItem.id)
+}
 
 </script>
-    
+
 <style></style>
