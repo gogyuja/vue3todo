@@ -6,9 +6,10 @@ import TodoList from "../../components/TodoList.vue";
 import TodoNav from "../../components/TodoNav.vue";
 import MyModal from "../../components/Modal.vue";
 import { reactive, ref } from "vue";
+import { todoObj } from "../../type/todoObj";
 
 const viewData = reactive({
-  todoList: [],
+  todoList: [] as todoObj[],
 });
 
 // 초기 로딩 시 localStorage의 값을 todoDatas에 설정
@@ -21,7 +22,7 @@ if (initialTodos) {
   }
 }
 
-const handleInputTodo = (todo) => {
+const handleInputTodo = (todo:todoObj) => {
   const storedData = localStorage.getItem("todos");
   let todos = [];
 
@@ -44,7 +45,7 @@ const handleInputTodo = (todo) => {
   }
 };
 
-const deleteTodo = (todo) => {
+const deleteTodo = (todo:todoObj) => {
   const idx = todo.idx;
 
   //todoDatas.value 에 idx 와 동일한 idx 값 제거.
