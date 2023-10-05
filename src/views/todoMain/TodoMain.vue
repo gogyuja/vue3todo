@@ -8,6 +8,8 @@ import MyModal from "../../components/Modal.vue";
 import { reactive, ref } from "vue";
 import { todoObj } from "../../type/todoObj";
 
+const titleRegex = /^$|.{101,}/;
+
 const viewData = reactive({
   todoList: [] as todoObj[],
 });
@@ -26,7 +28,12 @@ const handleInputTodo = (todo:todoObj) => {
   const storedData = localStorage.getItem("todos");
   let todos = [];
 
-  try {
+  if(titleRegex.test(todo.title)){
+    //alert('입력사항은 공백은 안되고 100자 이하여야 합니다.');
+    return false;
+  }
+  
+    try {
     if (storedData) {
       todos = JSON.parse(storedData);
     }
@@ -43,6 +50,7 @@ const handleInputTodo = (todo:todoObj) => {
   } else {
     console.error("todos is not an array:", todos);
   }
+
 };
 
 const deleteTodo = (todo:todoObj) => {
